@@ -13,11 +13,13 @@ using System.Windows.Forms;
 namespace nepesseg
 {
     public partial class Form1 : Form
+
     {
         public Form1()
+
         {
             InitializeComponent();
-
+            Random rng = new Random(1234);
             List<Person> GetPopulation(string csvpath)
             {
                 List<Person> population = new List<Person>();
