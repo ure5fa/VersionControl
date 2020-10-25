@@ -19,12 +19,18 @@ namespace nepesseg
 
         {
             InitializeComponent();
+
             Random rng = new Random(1234);
             List<Person> GetPopulation(string csvpath)
+
             {
                 List<Person> population = new List<Person>();
                 population = GetPopulation(@"C:\Temp\nép.csv");
+
+
+
                 using (StreamReader sr = new StreamReader(csvpath, Encoding.Default))
+
                 {
                     while (!sr.EndOfStream)
                     {
@@ -36,9 +42,62 @@ namespace nepesseg
                             NbrOfChildren = int.Parse(line[2])
                         });
                     }
-                }
 
+                }
+                for (int year = 2005; year <= 2024; year++)
+                {
+
+                    for (int i = 0; i < population.Count; i++)
+                    {
+                         void SimStep(int Kor, Person person)
+                        {
+                            
+                            if (!person.IsAlive) return;
+
+                            
+                            byte Kor = (byte)(year - person.BirthYear);
+
+                            
+                            double pDeath = (from x in DeathProbability
+                                             where x.Gender == person.Gender && x.Age == age
+                                             select x.P).FirstOrDefault();
+                            
+                            if (rng.NextDouble() <= pDeath)
+                                person.IsAlive = false;
+
+                            
+                            if (person.IsAlive && person.Gender == Gender.Female)
+                            {
+                               
+                                double pBirth = (from x in BirthProbability
+                                                 where x.Age == Kor
+                                                 select x.P).FirstOrDefault();
+                                
+                                if (rng.NextDouble() <= pBirth)
+                                {
+                                    Person újszülött = new Person();
+                                    újszülött.BirthYear = year;
+                                    újszülött.NbrOfChildren = 0;
+                                    újszülött.Gender = (Gender)(rng.Next(1, 3));
+                                    population.Add(újszülött);
+                                }
+                            }
+                        }
+                    }
+
+                    int nbrOfMales = (from x in population
+                                      where x.Gender == Gender.Male && x.IsAlive
+                                      select x).Count();
+                    int nbrOfFemales = (from x in population
+                                        where x.Gender == Gender.Female && x.IsAlive
+                                        select x).Count();
+                    Console.WriteLine(
+                        string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
+                }
                 return population;
+
+
+
             }
             List<BirthProbability> GetBirthProbabilities(string csvpath)
             {
@@ -53,7 +112,7 @@ namespace nepesseg
                         {
                             Kor = int.Parse(line[1]),
                             NbrOfChildren = int.Parse(line[2]),
-                            Percent = double.Parse(line[3]),
+                            pBirth = double.Parse(line[3]),
                             
                         });
                     }
@@ -76,7 +135,7 @@ namespace nepesseg
                         {
                             Gender = (Gender)Enum.Parse(typeof(Gender), line[1]),
                             Kor = int.Parse(line[2]),
-                            Percent = double.Parse(line[3]),
+                            pDeath = double.Parse(line[3]),
                         });
                     }
                 }
@@ -86,7 +145,8 @@ namespace nepesseg
 
             
             
-            
+
+
 
         }
 
