@@ -10,7 +10,7 @@ namespace nepesseg.Entities
     {
         public Gender Gender { get; set; }
         public int Kor { get; set; }
-        public double P { get; set; }
+        public double Percent { get; set; }
 
     }
 }
