@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UnitTestExample.Entities
-{{
+{
     public class Account
     {
         public Guid ID { get; set; }
@@ -13,4 +13,4 @@ namespace UnitTestExample.Entities
         public string Password { get; set; }
     }
 }
-}
+
