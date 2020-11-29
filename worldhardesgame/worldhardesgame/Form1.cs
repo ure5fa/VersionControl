@@ -13,6 +13,7 @@ namespace worldhardesgame
 {
     public partial class Form1 : Form
     {
+    
         GameController gc = new GameController();
         GameArea ga;
         int populationSize = 100;
